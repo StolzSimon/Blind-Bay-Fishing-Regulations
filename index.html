@@ -14,14 +14,33 @@
   html, body { margin: 0; padding: 0; height: 100%; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
   #map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; background: #ddd; }
   .legend {
-    background: rgba(255,255,255,0.96); padding: 10px 12px;
+    background: rgba(255,255,255,0.96); padding: 0;
     border-radius: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.3);
     font-size: 12px; line-height: 1.4; max-width: 270px;
+    overflow: hidden;
   }
+  .legend-head {
+    padding: 8px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .legend-head:hover { background: rgba(0,0,0,0.03); }
+  .legend-chev { color: #888; font-size: 11px; }
+  .legend-body { padding: 4px 12px 10px; border-top: 1px solid #eee; }
   .legend h4 { margin: 0 0 6px; font-size: 13px; }
   .legend .row { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
   .legend .sw { width: 18px; height: 12px; flex-shrink: 0; border: 1px solid rgba(0,0,0,0.3); }
   .legend .note { font-size: 11px; color: #666; margin-top: 6px; padding-top: 6px; border-top: 1px solid #ddd; }
+  @media (max-width: 600px) {
+    .legend { max-width: 220px; font-size: 11px; }
+    .legend-head { padding: 6px 10px; font-size: 12px; }
+    .legend-body { padding: 4px 10px 8px; }
+  }
 
   .sub-badge {
     background: white;
@@ -191,21 +210,43 @@ L.control.layers(
 var legend = L.control({ position: 'topright' });
 legend.onAdd = function() {
   var div = L.DomUtil.create('div', 'legend');
+  // Start collapsed on narrow screens
+  var startCollapsed = window.innerWidth < 600;
   div.innerHTML =
-    '<h4>Area 16 salmon — Chinook & Coho</h4>' +
-    '<div style="font-size:11px;color:#555;margin-bottom:6px;">Shaded water = Chinook retention allowed</div>' +
-    '<div class="row"><span class="sw" style="background:rgba(39,174,96,0.5);border-color:#27ae60"></span><b>16-6 / 9 / 12</b> — full</div>' +
-    '<div class="row"><span class="sw" style="background:rgba(231,76,60,0.5);border-color:#e74c3c"></span><b>16-7</b> — W of meridian</div>' +
-    '<div class="row"><span class="sw" style="background:rgba(243,156,18,0.5);border-color:#f39c12"></span><b>16-8</b> — W of line</div>' +
-    '<div class="row"><span class="sw" style="background:rgba(52,152,219,0.5);border-color:#3498db"></span><b>16-10</b> — N of line</div>' +
-    '<div class="row"><span class="sw" style="background:rgba(41,128,185,0.5);border-color:#2980b9"></span><b>16-11</b> — N of line</div>' +
-    '<div class="row"><span class="sw" style="background:rgba(142,68,173,0.5);border-color:#8e44ad"></span><b>16-13</b> — S of line</div>' +
-    '<div class="note"><b>Chinook:</b> 1/day (hatchery-marked or wild ≤80cm) in shaded areas; <b>0/day</b> everywhere else in Area 16.<br>' +
-    '<b>Coho:</b> <b style="color:#c0392b">non-retention</b> throughout Area 16.<br>' +
-    'Source: <a href="https://www.pac.dfo-mpo.gc.ca/fm-gp/rec/tidal-maree/a-s16-eng.html" target="_blank">DFO Area 16</a>. Salmon conservation stamp required. Barbless hooks only; single-point hooks only Apr 1 – Jul 14.</div>';
+    '<div class="legend-head" id="legendToggle">' +
+      '<span><b>Legend</b> — Area 16 salmon</span>' +
+      '<span class="legend-chev" id="legendChev">' + (startCollapsed ? '▸' : '▾') + '</span>' +
+    '</div>' +
+    '<div class="legend-body" id="legendBody" style="display:' + (startCollapsed ? 'none' : 'block') + '">' +
+      '<div style="font-size:11px;color:#555;margin-bottom:6px;">Shaded water = Chinook retention allowed</div>' +
+      '<div class="row"><span class="sw" style="background:rgba(39,174,96,0.5);border-color:#27ae60"></span><b>16-6 / 9 / 12</b> — full</div>' +
+      '<div class="row"><span class="sw" style="background:rgba(231,76,60,0.5);border-color:#e74c3c"></span><b>16-7</b> — W of meridian</div>' +
+      '<div class="row"><span class="sw" style="background:rgba(243,156,18,0.5);border-color:#f39c12"></span><b>16-8</b> — W of line</div>' +
+      '<div class="row"><span class="sw" style="background:rgba(52,152,219,0.5);border-color:#3498db"></span><b>16-10</b> — N of line</div>' +
+      '<div class="row"><span class="sw" style="background:rgba(41,128,185,0.5);border-color:#2980b9"></span><b>16-11</b> — N of line</div>' +
+      '<div class="row"><span class="sw" style="background:rgba(142,68,173,0.5);border-color:#8e44ad"></span><b>16-13</b> — S of line</div>' +
+      '<div class="note"><b>Chinook:</b> 1/day (hatchery-marked or wild ≤80cm) in shaded areas; <b>0/day</b> everywhere else in Area 16.<br>' +
+      '<b>Coho:</b> <b style="color:#c0392b">non-retention</b> throughout Area 16.<br>' +
+      'Source: <a href="https://www.pac.dfo-mpo.gc.ca/fm-gp/rec/tidal-maree/a-s16-eng.html" target="_blank">DFO Area 16</a>. Salmon conservation stamp required. Barbless hooks only; single-point hooks only Apr 1 – Jul 14.</div>' +
+    '</div>';
+  L.DomEvent.disableClickPropagation(div);
   return div;
 };
 legend.addTo(map);
+
+// Wire up toggle after legend is added to DOM
+setTimeout(function() {
+  var head = document.getElementById('legendToggle');
+  var body = document.getElementById('legendBody');
+  var chev = document.getElementById('legendChev');
+  if (head && body) {
+    head.addEventListener('click', function() {
+      var shown = body.style.display !== 'none';
+      body.style.display = shown ? 'none' : 'block';
+      chev.textContent = shown ? '▸' : '▾';
+    });
+  }
+}, 50);
 
 map.fitBounds(includedLayer.getBounds(), { padding: [40, 40] });
 </script>

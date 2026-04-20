@@ -1,0 +1,29 @@
+{
+  "name": "blind-bay-fishing-regulations",
+  "version": "1.0.0",
+  "description": "Chinook Regulation map for Jervis Inlet fishing regulations",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StolzSimon/Blind-Bay-Fishing-Regulations.git"
+  },
+  "keywords": [
+    "fishing",
+    "regulations",
+    "map",
+    "chinook",
+    "jervis-inlet"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/StolzSimon/Blind-Bay-Fishing-Regulations/issues"
+  },
+  "homepage": "https://github.com/StolzSimon/Blind-Bay-Fishing-Regulations#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#2980b9"/>
+  <g fill="white">
+    <path d="M 100 256
+             Q 140 150, 280 160
+             Q 380 175, 400 256
+             Q 380 337, 280 352
+             Q 140 362, 100 256 Z"/>
+    <path d="M 390 256
+             L 470 180
+             L 455 256
+             L 470 332
+             Z"/>
+  </g>
+  <!-- Eye near head (left side of body, opposite the tail) -->
+  <circle cx="170" cy="230" r="14" fill="#2980b9"/>
+</svg>
